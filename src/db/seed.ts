@@ -14,10 +14,10 @@ import {
 } from "./schema";
 
 async function main() {
-  console.log("🌱 Starting MarketFlow database seeding...");
+  console.log("[INFO] Starting MarketFlow database seeding...");
 
   if (!process.env.DATABASE_URL) {
-    console.warn("⚠️ DATABASE_URL environment variable is not defined. Skipping live database insertion.");
+    console.warn("[WARN] DATABASE_URL environment variable is not defined. Skipping live database insertion.");
     return;
   }
 
@@ -44,7 +44,7 @@ async function main() {
     .onConflictDoNothing()
     .returning();
 
-  console.log("✅ Users seeded/verified");
+  console.log("[OK] Users seeded/verified");
 
   // 2. Seed Categories
   const [electronicsCategory] = await db
@@ -70,7 +70,7 @@ async function main() {
     .onConflictDoNothing()
     .returning();
 
-  console.log("✅ Categories seeded");
+  console.log("[OK] Categories seeded");
 
   // 3. Seed Brand
   const [aetherBrand] = await db
@@ -83,7 +83,7 @@ async function main() {
     .onConflictDoNothing()
     .returning();
 
-  console.log("✅ Brands seeded");
+  console.log("[OK] Brands seeded");
 
   // 4. Seed Product
   const [flagshipPhone] = await db
@@ -163,12 +163,12 @@ async function main() {
     }
   }
 
-  console.log("🎉 Database seeding completed successfully!");
+  console.log("[SUCCESS] Database seeding completed successfully!");
 }
 
 main()
   .catch((err) => {
-    console.error("❌ Error during seeding:", err);
+    console.error("[ERROR] Error during seeding:", err);
     process.exit(1);
   })
   .finally(async () => {

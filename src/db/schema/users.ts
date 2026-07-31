@@ -33,18 +33,17 @@ export const accounts = pgTable("accounts", {
   type: varchar("type", { length: 255 }).notNull(),
   provider: varchar("provider", { length: 255 }).notNull(),
   providerAccountId: varchar("provider_account_id", { length: 255 }).notNull(),
-  refreshToken: text("refresh_token"),
-  accessToken: text("access_token"),
-  expiresAt: integer("expires_at"),
-  tokenType: varchar("token_type", { length: 255 }),
+  refresh_token: text("refresh_token"),
+  access_token: text("access_token"),
+  expires_at: integer("expires_at"),
+  token_type: varchar("token_type", { length: 255 }),
   scope: text("scope"),
-  idToken: text("id_token"),
-  sessionState: text("session_state"),
+  id_token: text("id_token"),
+  session_state: text("session_state"),
 });
 
 export const sessions = pgTable("sessions", {
-  id: uuid("id").defaultRandom().primaryKey(),
-  sessionToken: varchar("session_token", { length: 255 }).notNull().unique(),
+  sessionToken: varchar("session_token", { length: 255 }).notNull().primaryKey(),
   userId: uuid("user_id")
     .notNull()
     .references(() => users.id, { onDelete: "cascade" }),
