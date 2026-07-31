@@ -4,7 +4,7 @@ import Google from "next-auth/providers/google";
 import Github from "next-auth/providers/github";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { db } from "@/db";
-import { users } from "@/db/schema";
+import { users, sessions } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 
@@ -60,6 +60,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (user) {
         token.id = user.id;
         token.role = user.role || "customer";
+
+        // Generate and record a session token in the database sessions table
+        const sessionToken = crypto.randomUUID();
+        const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
+
+        try {
+          await db.insert(sessions).values({
+            sessionToken,
+            userId: user.id,
+            expires,
+          });
+          token.sessionToken = sessionToken;
+        } catch {
+          // Fallback if insertion fails
+          token.sessionToken = sessionToken;
+        }
       }
       return token;
     },
@@ -68,7 +84,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       if (session.user) {
         session.user.id = token.id;
         session.user.role = token.role;
+        session.user.sessionToken = token.sessionToken;
       }
+      session.sessionToken = token.sessionToken;
       return session;
     },
   },

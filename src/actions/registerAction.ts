@@ -1,7 +1,7 @@
 "use server";
 
 import { db } from "@/db";
-import { users } from "@/db/schema";
+import { users, sessions } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 
@@ -39,15 +39,28 @@ export async function registerCustomerAction(formData: {
     // Hash password & insert customer user
     const passwordHash = await bcrypt.hash(password, 10);
 
-    await db.insert(users).values({
-      name,
-      email,
-      passwordHash,
-      role: "customer",
-      status: "active",
+    const [newUser] = await db
+      .insert(users)
+      .values({
+        name,
+        email,
+        passwordHash,
+        role: "customer",
+        status: "active",
+      })
+      .returning();
+
+    // Create session token directly in sessions table
+    const sessionToken = crypto.randomUUID();
+    const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
+
+    await db.insert(sessions).values({
+      sessionToken,
+      userId: newUser.id,
+      expires,
     });
 
-    return { success: true };
+    return { success: true, sessionToken, userId: newUser.id };
   } catch {
     return { success: false, error: "Failed to create account. Please try again." };
   }

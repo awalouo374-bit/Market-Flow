@@ -17,7 +17,8 @@ import {
   ChevronDown,
   Sparkles,
   Heart,
-  Store
+  Store,
+  LogOutIcon
 } from "lucide-react";
 import { BrandLogo } from "@/components/shared/BrandLogo";
 import { BrandButton } from "@/components/shared/BrandButton";
@@ -218,7 +219,7 @@ export function HeaderNavigation({ userName, userEmail }: Props) {
                   <DropdownMenuSeparator />
                   <DropdownMenuItem asChild className="text-accent font-medium">
                     <button type="button" onClick={() => signOut({ callbackUrl: "/" })} className="flex items-center gap-2 text-accent font-medium cursor-pointer">
-                      <LayoutDashboard className="w-4 h-4" />
+                      <LogOutIcon className="w-4 h-4" />
                       <span>Se déconnecter</span>
                     </button>
                   </DropdownMenuItem>
