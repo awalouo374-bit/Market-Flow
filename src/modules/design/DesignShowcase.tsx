@@ -7,16 +7,11 @@ import { BrandCard } from "@/components/shared/BrandCard";
 import { MetricCard } from "@/components/shared/MetricCard";
 import { colors } from "./tokens";
 
-/**
- * DesignShowcase
- * ──────────────
- * Interactive visual showcase of the MarketFlow design system.
- * Demonstrates tokens, color palette, typography, buttons, cards, and metrics.
- */
+
 export function DesignShowcase() {
   return (
     <div className="mx-auto w-full max-w-6xl space-y-16 px-6 py-16">
-      {/* ── Header ──────────────────────────────── */}
+      
       <header className="text-center space-y-4">
         <div className="flex justify-center">
           <BrandLogo size="xl" showTagline />
@@ -29,35 +24,35 @@ export function DesignShowcase() {
         </p>
       </header>
 
-      {/* ── Color Palette ───────────────────────── */}
+     
       <section className="space-y-6">
         <h2 className="text-2xl font-bold text-foreground">Color Palette</h2>
         <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-5">
-          {/* Market Navy */}
+          
           <div className="space-y-2">
             <div className="h-24 rounded-xl bg-market-navy shadow-sm" />
             <p className="text-sm font-semibold text-foreground">Market Navy</p>
             <p className="text-xs text-muted-foreground">{colors.marketNavy.DEFAULT}</p>
           </div>
-          {/* Navy Dark */}
+          
           <div className="space-y-2">
             <div className="h-24 rounded-xl bg-market-navy-dark shadow-sm" />
             <p className="text-sm font-semibold text-foreground">Navy Dark</p>
             <p className="text-xs text-muted-foreground">{colors.marketNavy.dark}</p>
-          </div>
-          {/* Flow Cyan */}
+          </div>    
+          
           <div className="space-y-2">
             <div className="h-24 rounded-xl bg-flow-cyan shadow-sm" />
             <p className="text-sm font-semibold text-foreground">Flow Cyan</p>
             <p className="text-xs text-muted-foreground">{colors.flowCyan.DEFAULT}</p>
           </div>
-          {/* Cyan Light */}
+          
           <div className="space-y-2">
             <div className="h-24 rounded-xl bg-flow-cyan-light shadow-sm" />
             <p className="text-sm font-semibold text-foreground">Cyan Light</p>
             <p className="text-xs text-muted-foreground">{colors.flowCyan.light}</p>
           </div>
-          {/* Silver Metallic */}
+          
           <div className="space-y-2">
             <div className="h-24 rounded-xl bg-silver-metallic shadow-sm" />
             <p className="text-sm font-semibold text-foreground">Silver Metallic</p>
@@ -66,7 +61,7 @@ export function DesignShowcase() {
         </div>
       </section>
 
-      {/* ── Gradients ───────────────────────────── */}
+      
       <section className="space-y-6">
         <h2 className="text-2xl font-bold text-foreground">Gradients</h2>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
@@ -85,7 +80,7 @@ export function DesignShowcase() {
         </div>
       </section>
 
-      {/* ── Typography ──────────────────────────── */}
+      
       <section className="space-y-6">
         <h2 className="text-2xl font-bold text-foreground">Typography</h2>
         <div className="space-y-4">
@@ -108,7 +103,7 @@ export function DesignShowcase() {
         </div>
       </section>
 
-      {/* ── Buttons ──────────────────────────────── */}
+      
       <section className="space-y-6">
         <h2 className="text-2xl font-bold text-foreground">Buttons</h2>
         <div className="flex flex-wrap items-center gap-4">
@@ -125,7 +120,7 @@ export function DesignShowcase() {
         </div>
       </section>
 
-      {/* ── Cards ────────────────────────────────── */}
+      
       <section className="space-y-6">
         <h2 className="text-2xl font-bold text-foreground">Cards</h2>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -148,7 +143,7 @@ export function DesignShowcase() {
         </div>
       </section>
 
-      {/* ── Metric Cards ─────────────────────────── */}
+      
       <section className="space-y-6">
         <h2 className="text-2xl font-bold text-foreground">Metric Cards</h2>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
@@ -184,7 +179,7 @@ export function DesignShowcase() {
         </div>
       </section>
 
-      {/* ── Shadows & Utilities ───────────────────── */}
+      
       <section className="space-y-6">
         <h2 className="text-2xl font-bold text-foreground">Shadows & Utilities</h2>
         <div className="grid gap-6 sm:grid-cols-3">
@@ -200,7 +195,7 @@ export function DesignShowcase() {
         </div>
       </section>
 
-      {/* ── Logo Sizes ────────────────────────────── */}
+      
       <section className="space-y-6">
         <h2 className="text-2xl font-bold text-foreground">Logo Variants</h2>
         <div className="flex flex-wrap items-end gap-8">
@@ -223,7 +218,7 @@ export function DesignShowcase() {
         </div>
       </section>
 
-      {/* ── Footer ───────────────────────────────── */}
+      
       <footer className="text-center pt-8 border-t border-border">
         <p className="text-sm text-muted-foreground">
           MarketFlow Design System v1.0 — Built with Tailwind CSS + shadcn/ui
