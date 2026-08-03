@@ -36,7 +36,7 @@ const variantClasses: Record<BrandButtonVariant, string> = {
 
 export function BrandButton({
   children,
-  variant = "flow",
+  variant = "flow" ,
   size = "md",
   fullWidth = false,
   className = "",
