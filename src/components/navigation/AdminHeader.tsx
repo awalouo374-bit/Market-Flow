@@ -1,54 +1,30 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import {
-  Search,
-  Bell,
-  Sun,
-  Moon,
-  Plus,
-  ChevronRight,
-  ShieldCheck,
-  Menu,
-  CheckCircle2,
-  AlertTriangle,
+  Search, Bell, Sun, Moon, Plus,
+  ShieldCheck, Menu, CheckCircle2, AlertTriangle,
 } from "lucide-react";
 import { BrandButton } from "@/components/shared/BrandButton";
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenu, DropdownMenuContent, DropdownMenuItem,
+  DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { CreateProductModal } from "@/modules/admin/products/CreateProductModal";
 
 interface AdminHeaderProps {
   onMobileMenuToggle?: () => void;
 }
 
 export function AdminHeader({ onMobileMenuToggle }: AdminHeaderProps) {
-  const pathname = usePathname();
   const { theme, setTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  // Format path into readable breadcrumb
-  const pathSegments = pathname.split("/").filter(Boolean);
-  const breadcrumbItems = pathSegments.map((segment) => {
-    const formatted = segment.charAt(0).toUpperCase() + segment.slice(1);
-    return formatted;
-  });
+  useEffect(() => { setMounted(true); }, []);
 
   return (
     <header className="h-16 border-b border-border bg-card/80 backdrop-blur-md sticky top-0 z-30 px-4 sm:px-6 flex items-center justify-between gap-4">
-      {/* Left: Mobile Toggle & Breadcrumbs */}
       <div className="flex items-center gap-3">
         {onMobileMenuToggle && (
           <button
@@ -60,27 +36,10 @@ export function AdminHeader({ onMobileMenuToggle }: AdminHeaderProps) {
             <Menu className="w-5 h-5" />
           </button>
         )}
-
-        <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-muted-foreground">
-          <span className="font-semibold text-foreground flex items-center gap-1">
-            <ShieldCheck className="w-3.5 h-3.5 text-accent" />
-            Admin
-          </span>
-          {breadcrumbItems.slice(1).map((item, idx) => (
-            <React.Fragment key={item}>
-              <ChevronRight className="w-3.5 h-3.5 text-muted-foreground/60" />
-              <span
-                className={`font-medium ${
-                  idx === breadcrumbItems.length - 2
-                    ? "text-foreground font-semibold"
-                    : "text-muted-foreground"
-                }`}
-              >
-                {item}
-              </span>
-            </React.Fragment>
-          ))}
-        </nav>
+        <div className="flex items-center gap-1.5 text-xs font-semibold text-foreground">
+          <ShieldCheck className="w-3.5 h-3.5 text-accent" />
+          <span>Admin Portal</span>
+        </div>
       </div>
 
       {/* Center: Admin Search */}
@@ -95,13 +54,16 @@ export function AdminHeader({ onMobileMenuToggle }: AdminHeaderProps) {
 
       {/* Right: Actions */}
       <div className="flex items-center gap-2 sm:gap-3">
-        {/* Quick Add Product */}
-        <Link href="/admin/products/new">
-          <BrandButton variant="flow" size="sm" className="h-9 px-3 text-xs flex items-center gap-1.5 shadow-xs">
-            <Plus className="w-4 h-4" />
-            <span className="hidden sm:inline">Add Product</span>
-          </BrandButton>
-        </Link>
+        <CreateProductModal
+          categories={[]}
+          brands={[]}
+          trigger={
+            <BrandButton variant="flow" size="sm" className="h-9 px-3 text-xs gap-1.5 shadow-xs">
+              <Plus className="w-4 h-4" />
+              <span className="hidden sm:inline">Add Product</span>
+            </BrandButton>
+          }
+        />
 
         {/* Notifications */}
         <DropdownMenu>

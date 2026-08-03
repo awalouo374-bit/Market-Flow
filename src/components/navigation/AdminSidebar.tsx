@@ -128,7 +128,7 @@ export function AdminSidebar({ isCollapsed, onToggleCollapse }: AdminSidebarProp
                           isActive ? "text-accent" : "text-muted-foreground group-hover:text-foreground"
                         }`}
                       />
-                      {!isCollapsed && <span>{item.label}</span>}
+                      {!isCollapsed && <span className="font-bold">{item.label}</span>}
                     </div>
 
                     {!isCollapsed && item.badge && (

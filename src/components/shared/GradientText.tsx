@@ -6,12 +6,10 @@ type GradientVariant = "flow" | "cyan" | "silver";
 
 interface GradientTextProps {
   children: ReactNode;
-  /** Gradient style */
   variant?: GradientVariant;
-  /** HTML element to render */
   as?: "h1" | "h2" | "h3" | "h4" | "p" | "span";
-  /** Additional classes */
   className?: string;
+  id?: string;
 }
 
 const gradientStyles: Record<GradientVariant, string> = {
@@ -25,9 +23,11 @@ export function GradientText({
   variant = "flow",
   as: Tag = "span",
   className = "",
+  id,
 }: GradientTextProps) {
   return (
     <Tag
+      id={id}
       className={`bg-clip-text text-transparent ${gradientStyles[variant]} ${className}`}
     >
       {children}
