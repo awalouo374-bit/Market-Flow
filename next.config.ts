@@ -3,10 +3,15 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
-      // Unsplash — used in seed data for product images
+      // Unsplash CDN (optimised delivery)
       {
         protocol: "https",
         hostname: "images.unsplash.com",
+      },
+      // Unsplash web URLs (category/product imageUrl from seed data)
+      {
+        protocol: "https",
+        hostname: "unsplash.com",
       },
       // Placeholder / mock image services
       {

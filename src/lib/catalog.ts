@@ -4,7 +4,7 @@
  */
 import { db } from "@/db";
 import { products, categories, brands, productImages, productVariants } from "@/db/schema";
-import { eq, and, ilike, inArray, sql, asc, desc, or } from "drizzle-orm";
+import { eq, and, ilike, inArray, sql, asc, desc, or, gte, lte } from "drizzle-orm";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -44,9 +44,18 @@ export interface CatalogFilters {
   categorySlug?: string;
   brandId?: string;
   featured?: boolean;
+  minPrice?: number;
+  maxPrice?: number;
   sortBy?: "newest" | "price_asc" | "price_desc" | "name_asc";
   page?: number;
   perPage?: number;
+}
+
+export interface CatalogBrand {
+  id: string;
+  name: string;
+  slug: string;
+  logoUrl: string | null;
 }
 
 export interface PaginatedProducts {
@@ -67,6 +76,8 @@ export async function getCatalogProducts(
     categorySlug,
     brandId,
     featured,
+    minPrice,
+    maxPrice,
     sortBy = "newest",
     page = 1,
     perPage = 12,
@@ -274,4 +285,32 @@ export async function getProductBySlug(slug: string) {
 export async function getFeaturedProducts(limit = 8): Promise<CatalogProduct[]> {
   const result = await getCatalogProducts({ featured: true, perPage: limit });
   return result.items;
+}
+
+// ── Categories Hub — root categories with their children ─────────────────────
+
+export interface CategoryWithChildren extends CatalogCategory {
+  children: CatalogCategory[];
+}
+
+export async function getCategoriesWithChildren(): Promise<CategoryWithChildren[]> {
+  // Single query: all active categories with product counts
+  const all = await getCatalogCategories();
+
+  // Separate roots and children
+  const roots = all.filter((c) => c.parentId === null);
+  const childMap = new Map<string, CatalogCategory[]>();
+
+  for (const cat of all) {
+    if (cat.parentId) {
+      const list = childMap.get(cat.parentId) ?? [];
+      list.push(cat);
+      childMap.set(cat.parentId, list);
+    }
+  }
+
+  return roots.map((root) => ({
+    ...root,
+    children: childMap.get(root.id) ?? [],
+  }));
 }

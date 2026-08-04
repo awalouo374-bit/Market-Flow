@@ -10,6 +10,25 @@ interface CategoriesTableProps {
   parentOptions: SelectOption[];
 }
 
+/** Returns true only for URLs that serve an actual image binary */
+function isImageSrc(url: string | null): url is string {
+  if (!url) return false;
+  try {
+    const { hostname, pathname } = new URL(url);
+    if (hostname === "unsplash.com") return false;
+    return (
+      /\.(jpe?g|png|webp|avif|gif|svg)(\?|$)/i.test(pathname) ||
+      hostname === "images.unsplash.com" ||
+      hostname.endsWith(".amazonaws.com") ||
+      hostname.endsWith(".cloudinary.com") ||
+      hostname === "via.placeholder.com" ||
+      hostname === "placehold.co"
+    );
+  } catch {
+    return false;
+  }
+}
+
 export function CategoriesTable({ categories, parentOptions }: CategoriesTableProps) {
   return (
     <div className="rounded-2xl border border-border overflow-hidden">
@@ -31,7 +50,7 @@ export function CategoriesTable({ categories, parentOptions }: CategoriesTablePr
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-3">
                     <div className="w-9 h-9 rounded-xl bg-muted border border-border/60 overflow-hidden shrink-0 relative flex items-center justify-center">
-                      {cat.imageUrl ? (
+                      {isImageSrc(cat.imageUrl) ? (
                         <Image src={cat.imageUrl} alt={cat.name} fill className="object-cover" sizes="36px" />
                       ) : (
                         <FolderOpen className="w-4 h-4 text-muted-foreground/50" />
