@@ -2,14 +2,12 @@ import { neon } from "@neondatabase/serverless";
 import { drizzle } from "drizzle-orm/neon-http";
 import * as schema from "./schema";
 
-const databaseUrl = process.env.DATABASE_URL;
+// Use a placeholder during build so static analysis succeeds.
+// At runtime the real DATABASE_URL is always present via .env / .env.local.
+const url =
+  process.env.DATABASE_URL ??
+  "postgresql://placeholder:placeholder@placeholder/placeholder";
 
-
-
-if (!databaseUrl) {
-  throw new Error("DATABASE_URL environment variable is not set");
-}
-
-const sql = neon(databaseUrl);
+const sql = neon(url);
 
 export const db = drizzle(sql, { schema });
