@@ -1,6 +1,16 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  // Prevent Turbopack/webpack from bundling these packages.
+  // They must run in Node's native runtime so they have access to Node's
+  // TLS stack. When bundled by Turbopack the fetch polyfill it injects
+  // does not support the same TLS options, causing "fetch failed" errors.
+  serverExternalPackages: [
+    "@neondatabase/serverless",
+    "@auth/drizzle-adapter",
+    "drizzle-orm",
+  ],
+
   images: {
     remotePatterns: [
       // Unsplash CDN (optimised delivery)
