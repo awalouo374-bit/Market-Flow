@@ -80,7 +80,13 @@ export default async function ProductPage({ params }: PageProps) {
       {/* Main product section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
         <ProductGallery images={product.images} productName={product.name} />
-        <ProductDetails product={productProps} variants={product.variants} />
+        <ProductDetails
+          product={productProps}
+          variants={product.variants.map((v) => ({
+            ...v,
+            price: v.price ?? product.price ?? "0.00",
+          }))}
+        />
       </div>
 
       {/* Related products */}
