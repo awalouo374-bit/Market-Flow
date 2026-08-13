@@ -5,7 +5,7 @@
 
 import { db } from "@/db";
 import { products, categories, brands, productImages, productVariants } from "@/db/schema";
-import { eq, and, ilike, inArray, sql, asc, desc, or, gte, lte } from "drizzle-orm";
+import { eq, and, ilike, inArray, sql, asc, desc, or, gte, lte, isNotNull } from "drizzle-orm";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
@@ -50,6 +50,7 @@ export interface CatalogFilters {
   sortBy?: "newest" | "price_asc" | "price_desc" | "name_asc";
   page?: number;
   perPage?: number;
+  dealsOnly?: boolean;
 }
 
 export interface CatalogBrand {
@@ -82,6 +83,7 @@ export async function getCatalogProducts(
     sortBy = "newest",
     page = 1,
     perPage = 12,
+    dealsOnly,
   } = filters;
 
   const offset = (page - 1) * perPage;
@@ -117,6 +119,10 @@ export async function getCatalogProducts(
 
   if (featured) {
     conditions.push(eq(products.isFeatured, true));
+  }
+
+  if (dealsOnly) {
+    conditions.push(isNotNull(products.compareAtPrice));
   }
 
   const whereClause = conditions.length > 1 ? and(...conditions) : conditions[0];
@@ -286,6 +292,14 @@ export async function getProductBySlug(slug: string) {
 export async function getFeaturedProducts(limit = 8): Promise<CatalogProduct[]> {
   const result = await getCatalogProducts({ featured: true, perPage: limit });
   return result.items;
+}
+
+// ── Deals Products ────────────────────────────────────────────────────────────
+
+export async function getDealsProducts(
+  filters: CatalogFilters = {}
+): Promise<PaginatedProducts> {
+  return getCatalogProducts({ ...filters, dealsOnly: true });
 }
 
 // ── Categories Hub — root categories with their children ─────────────────────
