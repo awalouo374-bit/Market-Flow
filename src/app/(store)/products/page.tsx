@@ -1,4 +1,4 @@
-﻿import type { Metadata } from "next";
+import type { Metadata } from "next";
 import { Suspense } from "react";
 import { getCatalogProducts, getCatalogCategories, getCatalogBrands } from "@/lib/catalog";
 import { CatalogHero } from "@/modules/catalog/CatalogHero";
@@ -6,6 +6,8 @@ import { CategoryBanner } from "@/modules/catalog/CategoryBanner";
 import { CatalogFiltersPanel } from "@/modules/catalog/CatalogFiltersPanel";
 import { ProductGrid } from "@/modules/catalog/ProductGrid";
 import { ProductGridSkeleton } from "@/modules/catalog/ProductCardSkeleton";
+
+export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Product Catalog – MarketFlow",

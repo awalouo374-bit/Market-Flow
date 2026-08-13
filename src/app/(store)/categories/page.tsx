@@ -3,6 +3,8 @@ import { getCategoriesWithChildren, getCatalogProducts } from "@/lib/catalog";
 import { CategoriesHero } from "@/modules/categories/CategoriesHero";
 import { CategoriesGrid } from "@/modules/categories/CategoriesGrid";
 
+export const dynamic = "force-dynamic";
+
 export const metadata: Metadata = {
   title: "Categories – MarketFlow",
   description:

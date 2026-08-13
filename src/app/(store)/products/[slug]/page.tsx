@@ -9,6 +9,8 @@ import { ProductDetails } from "@/modules/catalog/ProductDetails";
 import { ProductCard } from "@/modules/catalog/ProductCard";
 import { ProductGridSkeleton } from "@/modules/catalog/ProductCardSkeleton";
 
+export const dynamic = "force-dynamic";
+
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
