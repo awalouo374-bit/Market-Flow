@@ -10,7 +10,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { ConfirmDeleteModal } from "@/components/shared/ConfirmDeleteModal";
 import { EditProductModal } from "./EditProductModal";
-import { deleteProduct, getProductEditDefaults } from "@/lib/admin-products";
+import { deleteProductAction, getProductEditDefaultsAction } from "@/actions/editProductAction";
 import { toast } from "sonner";
 import type { AdminProduct } from "@/lib/admin-products";
 import type { ProductDefaultValues } from "./ProductFormFields";
@@ -32,7 +32,7 @@ export function ProductRowActions({ product, categories, brands }: ProductRowAct
 
   const openEdit = () => {
     startFetch(async () => {
-      const full = await getProductEditDefaults(product.id);
+      const full = await getProductEditDefaultsAction(product.id);
       setEditDefaults({
         name: product.name,
         sku: product.sku,
@@ -53,7 +53,7 @@ export function ProductRowActions({ product, categories, brands }: ProductRowAct
 
   const handleDelete = async () => {
     try {
-      await deleteProduct(product.id);
+      await deleteProductAction(product.id);
       toast.success("Product deleted");
       router.refresh();
     } catch {

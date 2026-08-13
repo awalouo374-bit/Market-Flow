@@ -9,6 +9,7 @@ const nextConfig: NextConfig = {
     "@neondatabase/serverless",
     "@auth/drizzle-adapter",
     "drizzle-orm",
+    "pg",
   ],
 
   images: {

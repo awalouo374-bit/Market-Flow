@@ -29,3 +29,8 @@ export async function updateOrderStatusAction(params: {
     return { error: "Failed to update order." };
   }
 }
+
+export async function getOrderDetailAction(id: string) {
+  const { getOrderDetail } = await import("@/lib/admin-orders");
+  return getOrderDetail(id);
+}

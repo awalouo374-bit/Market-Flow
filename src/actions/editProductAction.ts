@@ -86,3 +86,18 @@ export async function editProductAction(id: string, data: ProductFormData) {
     return { error: "Failed to update product. Please try again." };
   }
 }
+
+export async function deleteProductAction(id: string) {
+  try {
+    await db.delete(products).where(eq(products.id, id));
+    revalidatePath("/admin/products");
+    return { success: true };
+  } catch {
+    return { error: "Failed to delete product." };
+  }
+}
+
+export async function getProductEditDefaultsAction(id: string) {
+  const { getProductEditDefaults } = await import("@/lib/admin-products");
+  return getProductEditDefaults(id);
+}

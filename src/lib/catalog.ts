@@ -2,6 +2,7 @@
  * Catalog data-fetching helpers — server-side only (RSC)
  * All functions run on the server and query Neon via Drizzle.
  */
+
 import { db } from "@/db";
 import { products, categories, brands, productImages, productVariants } from "@/db/schema";
 import { eq, and, ilike, inArray, sql, asc, desc, or, gte, lte } from "drizzle-orm";

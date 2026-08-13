@@ -4,6 +4,7 @@ import { db } from "@/db";
 import { users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
+import { getCustomerDetail } from "@/lib/admin-customers";
 import type { CustomerRole, CustomerStatus } from "@/lib/admin-customers";
 
 export async function updateCustomerAction(params: {
@@ -23,4 +24,8 @@ export async function updateCustomerAction(params: {
   } catch {
     return { error: "Failed to update customer." };
   }
+}
+
+export async function getCustomerDetailAction(id: string) {
+  return getCustomerDetail(id);
 }

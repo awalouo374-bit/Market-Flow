@@ -8,21 +8,20 @@ import {
   DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { OrderDetailModal } from "./OrderDetailModal";
-import { updateOrderStatusAction } from "@/actions/orderActions";
-import { getOrderDetail } from "@/lib/admin-orders";
+import { updateOrderStatusAction, getOrderDetailAction } from "@/actions/orderActions";
 import { toast } from "sonner";
-import type { AdminOrder } from "@/lib/admin-orders";
+import type { AdminOrder, AdminOrderDetail } from "@/lib/admin-orders";
 
 export function OrderRowActions({ order }: { order: AdminOrder }) {
   const router = useRouter();
   const [detailOpen, setDetailOpen] = useState(false);
-  const [detail, setDetail] = useState<Awaited<ReturnType<typeof getOrderDetail>>>(null);
+  const [detail, setDetail] = useState<AdminOrderDetail | null>(null);
   const [isFetching, startFetch] = useTransition();
   const [isUpdating, startUpdate] = useTransition();
 
   const openDetail = () => {
     startFetch(async () => {
-      const d = await getOrderDetail(order.id);
+      const d = await getOrderDetailAction(order.id);
       setDetail(d);
       setDetailOpen(true);
     });

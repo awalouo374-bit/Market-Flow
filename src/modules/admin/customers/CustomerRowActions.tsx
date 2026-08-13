@@ -8,21 +8,22 @@ import {
   DropdownMenuSeparator, DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { CustomerDetailModal } from "./CustomerDetailModal";
-import { updateCustomerAction } from "@/actions/customerActions";
-import { getCustomerDetail } from "@/lib/admin-customers";
+// Server data fetching goes through a Server Action — never import lib/ directly
+// into a "use client" file as it would pull db/pg into the browser bundle.
+import { updateCustomerAction, getCustomerDetailAction } from "@/actions/customerActions";
 import { toast } from "sonner";
-import type { AdminCustomer } from "@/lib/admin-customers";
+import type { AdminCustomer, AdminCustomerDetail } from "@/lib/admin-customers";
 
 export function CustomerRowActions({ customer }: { customer: AdminCustomer }) {
   const router = useRouter();
   const [detailOpen, setDetailOpen] = useState(false);
-  const [detail, setDetail] = useState<Awaited<ReturnType<typeof getCustomerDetail>>>(null);
-  const [isFetching, startFetch]   = useTransition();
-  const [isUpdating, startUpdate]  = useTransition();
+  const [detail, setDetail] = useState<AdminCustomerDetail | null>(null);
+  const [isFetching, startFetch]  = useTransition();
+  const [isUpdating, startUpdate] = useTransition();
 
   const openDetail = () => {
     startFetch(async () => {
-      const d = await getCustomerDetail(customer.id);
+      const d = await getCustomerDetailAction(customer.id);
       setDetail(d);
       setDetailOpen(true);
     });

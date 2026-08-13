@@ -1,3 +1,5 @@
+
+
 import { relations } from "drizzle-orm";
 import { users, accounts, sessions, userAddresses } from "./users";
 import { categories, brands, products, productVariants, productImages } from "./catalog";
