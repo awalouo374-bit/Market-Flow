@@ -5,6 +5,14 @@ const nextConfig: NextConfig = {
   // They must run in Node's native runtime so they have access to Node's
   // TLS stack. When bundled by Turbopack the fetch polyfill it injects
   // does not support the same TLS options, causing "fetch failed" errors.
+  allowedDevOrigins: [
+    "localhost:3000",
+    "localhost:3001",
+    "localhost:3003",
+    "192.168.50.130",
+    "192.168.50.130:3003",
+  ],
+
   serverExternalPackages: [
     "@neondatabase/serverless",
     "better-auth",

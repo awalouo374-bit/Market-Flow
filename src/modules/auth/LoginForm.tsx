@@ -42,7 +42,7 @@ export function LoginForm() {
 
   const fillDemoAccount = (demoEmail: string, roleName: string) => {
     setEmail(demoEmail);
-    setPassword("demo123456");
+    setPassword(demoEmail.includes("admin") ? "Galabdon09" : "demo123456");
     setErrorMsg(null);
     toast.info(`Filled ${roleName} credentials`, {
       description: `Email: ${demoEmail}`,
