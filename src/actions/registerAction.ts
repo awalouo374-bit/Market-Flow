@@ -1,9 +1,9 @@
 "use server";
 
+import { auth } from "@/auth";
 import { db } from "@/db";
-import { users, sessions } from "@/db/schema";
+import { users } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import bcrypt from "bcryptjs";
 
 export async function registerCustomerAction(formData: {
   name: string;
@@ -36,32 +36,21 @@ export async function registerCustomerAction(formData: {
       return { success: false, error: "An account with this email address already exists." };
     }
 
-    // Hash password & insert customer user
-    const passwordHash = await bcrypt.hash(password, 10);
-
-    const [newUser] = await db
-      .insert(users)
-      .values({
-        name,
+    const res = await auth.api.signUpEmail({
+      body: {
         email,
-        passwordHash,
-        role: "customer",
-        status: "active",
-      })
-      .returning();
-
-    // Create session token directly in sessions table
-    const sessionToken = crypto.randomUUID();
-    const expires = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000); // 30 days
-
-    await db.insert(sessions).values({
-      sessionToken,
-      userId: newUser.id,
-      expires,
+        password,
+        name,
+      },
     });
 
-    return { success: true, sessionToken, userId: newUser.id };
-  } catch {
-    return { success: false, error: "Failed to create account. Please try again." };
+    if (!res) {
+      return { success: false, error: "Failed to create account. Please try again." };
+    }
+
+    return { success: true };
+  } catch (err: unknown) {
+    const errorMsg = err instanceof Error ? err.message : "Failed to create account. Please try again.";
+    return { success: false, error: errorMsg };
   }
 }

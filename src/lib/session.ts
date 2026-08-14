@@ -1,6 +1,5 @@
-
-
 import { auth } from "@/auth";
+import { headers } from "next/headers";
 import { db } from "@/db";
 import { sessions, users } from "@/db/schema";
 import { eq, gte, and } from "drizzle-orm";
@@ -19,7 +18,10 @@ export interface ConnectedUserInfo {
  * Retrieves the currently connected user and active session token.
  */
 export async function getConnectedUser(): Promise<ConnectedUserInfo | null> {
-  const session = await auth();
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  });
+
   if (!session?.user?.email) {
     return null;
   }
@@ -31,25 +33,14 @@ export async function getConnectedUser(): Promise<ConnectedUserInfo | null> {
 
   if (!user) return null;
 
-  // Find active database session token for this user
-  const activeSession = await db.query.sessions.findFirst({
-    where: and(
-      eq(sessions.userId, user.id),
-      gte(sessions.expires, new Date())
-    ),
-    orderBy: (s, { desc }) => [desc(s.expires)],
-  });
-
-  const sessionToken = activeSession?.sessionToken || (session as unknown as { sessionToken?: string }).sessionToken || null;
-
   return {
     id: user.id,
     name: user.name,
     email: user.email,
-    role: user.role,
-    status: user.status,
+    role: (user.role as "admin" | "manager" | "customer") || "customer",
+    status: (user.status as "active" | "suspended") || "active",
     image: user.image,
-    sessionToken,
+    sessionToken: session.session.token,
   };
 }
 
@@ -61,8 +52,8 @@ export async function getConnectedUserByToken(sessionToken: string) {
 
   const activeSession = await db.query.sessions.findFirst({
     where: and(
-      eq(sessions.sessionToken, sessionToken),
-      gte(sessions.expires, new Date())
+      eq(sessions.token, sessionToken),
+      gte(sessions.expiresAt, new Date())
     ),
   });
 
@@ -83,8 +74,8 @@ export async function getConnectedUserByToken(sessionToken: string) {
       status: user.status,
       image: user.image,
     },
-    sessionToken: activeSession.sessionToken,
-    expires: activeSession.expires,
+    sessionToken: activeSession.token,
+    expires: activeSession.expiresAt,
   };
 }
 

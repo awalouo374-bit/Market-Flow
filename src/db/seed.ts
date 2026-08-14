@@ -30,6 +30,7 @@ async function main() {
   const [adminUser] = await db
     .insert(users)
     .values({
+      id: crypto.randomUUID(),
       name: "Marketflow Admin",
       email: "admin@marketflow.com",
       passwordHash: demoPasswordHash,
@@ -42,6 +43,7 @@ async function main() {
   const [customerUser] = await db
     .insert(users)
     .values({
+      id: crypto.randomUUID(),
       name: "Jane Doe",
       email: "jane@example.com",
       passwordHash: demoPasswordHash,

@@ -20,7 +20,7 @@ export interface AdminCustomer {
 
 export interface AdminCustomerDetail extends AdminCustomer {
   image: string | null;
-  emailVerified: Date | null;
+  emailVerified: boolean;
   recentOrders: {
     id: string;
     orderNumber: string;

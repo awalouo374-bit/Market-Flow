@@ -1,6 +1,6 @@
 "use client";
 
-import { signIn } from "next-auth/react";
+import { authClient } from "@/lib/auth-client";
 
 export async function loginWithCredentials(formData: {
   email: string;
@@ -8,15 +8,13 @@ export async function loginWithCredentials(formData: {
   redirectTo?: string;
 }) {
   try {
-    const result = await signIn("credentials", {
+    const { error } = await authClient.signIn.email({
       email: formData.email,
       password: formData.password || "demo123456",
-      redirect: false,
-      redirectTo: formData.redirectTo || "/",
     });
 
-    if (result?.error) {
-      return { success: false, error: "Invalid email or password" };
+    if (error) {
+      return { success: false, error: error.message || "Invalid email or password" };
     }
 
     return { success: true };
@@ -26,5 +24,5 @@ export async function loginWithCredentials(formData: {
 }
 
 export async function loginWithSocial(provider: "google" | "github") {
-  await signIn(provider, { callbackUrl: "/" });
+  await authClient.signIn.social({ provider, callbackURL: "/" });
 }

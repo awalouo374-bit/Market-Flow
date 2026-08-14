@@ -32,7 +32,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { signOut } from "next-auth/react";
+import { authClient } from "@/lib/auth-client";
 
 const navLinks = [
   { href: "/products", label: "Catalog" },
@@ -216,9 +216,15 @@ export function HeaderNavigation({ userName, userEmail }: Props) {
                       <span>Order History</span>
                     </Link>
                   </DropdownMenuItem>
-                  <DropdownMenuSeparator />
                   <DropdownMenuItem asChild className="text-accent font-medium">
-                    <button type="button" onClick={() => signOut({ callbackUrl: "/" })} className="flex items-center gap-2 text-accent font-medium cursor-pointer">
+                    <button
+                      type="button"
+                      onClick={async () => {
+                        await authClient.signOut();
+                        window.location.href = "/";
+                      }}
+                      className="flex items-center gap-2 text-accent font-medium cursor-pointer w-full text-left"
+                    >
                       <LogOutIcon className="w-4 h-4" />
                       <span>Se déconnecter</span>
                     </button>

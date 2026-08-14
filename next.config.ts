@@ -7,7 +7,7 @@ const nextConfig: NextConfig = {
   // does not support the same TLS options, causing "fetch failed" errors.
   serverExternalPackages: [
     "@neondatabase/serverless",
-    "@auth/drizzle-adapter",
+    "better-auth",
     "drizzle-orm",
     "pg",
   ],
