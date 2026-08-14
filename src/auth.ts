@@ -10,6 +10,7 @@ import bcrypt from "bcryptjs";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   secret: process.env.AUTH_SECRET || process.env.NEXTAUTH_SECRET || "marketflow_jwt_secret_key_2026_production_ready",
+  trustHost: true,
   adapter: DrizzleAdapter(db),
   session: { strategy: "jwt" },
   pages: { signIn: "/login" },
