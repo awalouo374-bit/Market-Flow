@@ -13,6 +13,8 @@ import {
   productReviews,
 } from "./schema";
 
+import bcrypt from "bcryptjs";
+
 async function main() {
   console.log("[INFO] Starting MarketFlow database seeding...");
 
@@ -21,12 +23,16 @@ async function main() {
     return;
   }
 
+  // Hash the demo password for seeded users
+  const demoPasswordHash = await bcrypt.hash("demo123456", 10);
+
   // 1. Seed Admin & Customer Users
   const [adminUser] = await db
     .insert(users)
     .values({
       name: "Marketflow Admin",
       email: "admin@marketflow.com",
+      passwordHash: demoPasswordHash,
       role: "admin",
       status: "active",
     })
@@ -38,6 +44,7 @@ async function main() {
     .values({
       name: "Jane Doe",
       email: "jane@example.com",
+      passwordHash: demoPasswordHash,
       role: "customer",
       status: "active",
     })
