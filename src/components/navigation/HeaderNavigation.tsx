@@ -39,6 +39,7 @@ const navLinks = [
   { href: "/categories", label: "Categories" },
   { href: "/featured", label: "Featured" },
   { href: "/deals", label: "Deals", badge: "Hot" },
+  { href: "/shipping", label: "Shipping" },
 ];
 
 type Props = { userName?: string; userEmail?: string };
