@@ -1,13 +1,12 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import { connection } from "next/server";
 import { getCatalogProducts, getCatalogCategories, getCatalogBrands } from "@/lib/catalog";
 import { CatalogHero } from "@/modules/catalog/CatalogHero";
 import { CategoryBanner } from "@/modules/catalog/CategoryBanner";
 import { CatalogFiltersPanel } from "@/modules/catalog/CatalogFiltersPanel";
 import { ProductGrid } from "@/modules/catalog/ProductGrid";
 import { ProductGridSkeleton } from "@/modules/catalog/ProductCardSkeleton";
-
-export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
   title: "Product Catalog – MarketFlow",
@@ -21,14 +20,9 @@ export const metadata: Metadata = {
 
 interface PageProps {
   searchParams: Promise<{
-    search?: string;
-    category?: string;
-    brand?: string;
-    featured?: string;
-    sort?: string;
-    page?: string;
-    minPrice?: string;
-    maxPrice?: string;
+    search?: string; category?: string; brand?: string;
+    featured?: string; sort?: string; page?: string;
+    minPrice?: string; maxPrice?: string;
   }>;
 }
 
@@ -43,6 +37,8 @@ async function CatalogContent({
   categories: Awaited<ReturnType<typeof getCatalogCategories>>;
   brands: Awaited<ReturnType<typeof getCatalogBrands>>;
 }) {
+  await connection();
+
   const { items, total, totalPages, page: currentPage } = await getCatalogProducts({
     search, categorySlug: category, brandId: brand, featured,
     sortBy: sort, page, perPage: 16, minPrice, maxPrice,
@@ -50,19 +46,16 @@ async function CatalogContent({
 
   return (
     <ProductGrid
-      products={items}
-      total={total}
-      totalPages={totalPages}
-      currentPage={currentPage}
-      categories={categories}
-      brands={brands}
-      search={search}
-      category={category}
+      products={items} total={total} totalPages={totalPages}
+      currentPage={currentPage} categories={categories} brands={brands}
+      search={search} category={category}
     />
   );
 }
 
 export default async function ProductsPage({ searchParams }: PageProps) {
+  await connection();
+
   const params   = await searchParams;
   const search   = params.search;
   const category = params.category;
@@ -83,22 +76,17 @@ export default async function ProductsPage({ searchParams }: PageProps) {
     <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
       <CatalogHero />
       <CategoryBanner categories={categories} />
-
       <div className="flex gap-8">
-        {/* Desktop sidebar — sticky, never causes layout shift */}
         <aside className="hidden lg:block w-56 xl:w-64 shrink-0">
           <div className="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto pr-1">
             <CatalogFiltersPanel categories={categories} brands={brands} totalProducts={total} />
           </div>
         </aside>
-
-        {/* Main content */}
         <div className="flex-1 min-w-0">
           <Suspense fallback={<ProductGridSkeleton count={16} />}>
             <CatalogContent
-              search={search} category={category} brand={brand}
-              featured={featured} sort={sort} page={page}
-              minPrice={minPrice} maxPrice={maxPrice}
+              search={search} category={category} brand={brand} featured={featured}
+              sort={sort} page={page} minPrice={minPrice} maxPrice={maxPrice}
               categories={categories} brands={brands}
             />
           </Suspense>

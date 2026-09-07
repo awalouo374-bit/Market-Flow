@@ -114,9 +114,9 @@ export function CheckoutPaymentStep({ onNext, onBack, isProcessing }: Props) {
                 : "bg-slate-950/60 border-slate-800 text-slate-400 hover:border-slate-700"
             }`}
           >
-            {method === "card" && "💳 Card"}
-            {method === "paypal" && "🅿 PayPal"}
-            {method === "apple_pay" && "🍎 Apple Pay"}
+            {method === "card" && " Card"}
+            {method === "paypal" && " PayPal"}
+            {method === "apple_pay" && " Apple Pay"}
           </button>
         ))}
       </div>

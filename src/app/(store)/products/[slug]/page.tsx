@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
+import { connection } from "next/server";
 import { ChevronRight } from "lucide-react";
 import { getProductBySlug, getFeaturedProducts } from "@/lib/catalog";
 import { ProductGallery } from "@/modules/catalog/ProductGallery";
@@ -9,13 +10,13 @@ import { ProductDetails } from "@/modules/catalog/ProductDetails";
 import { ProductCard } from "@/modules/catalog/ProductCard";
 import { ProductGridSkeleton } from "@/modules/catalog/ProductCardSkeleton";
 
-export const dynamic = "force-dynamic";
-
 interface PageProps {
   params: Promise<{ slug: string }>;
 }
 
+// generateMetadata also does a DB read — connection() opts it out of prerender
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  await connection();
   const { slug } = await params;
   const product = await getProductBySlug(slug);
   if (!product) return { title: "Product not found – MarketFlow" };
@@ -30,7 +31,8 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   };
 }
 
-async function RelatedProducts({ categoryId }: { categoryId: string | null }) {
+async function RelatedProducts() {
+  await connection();
   const related = await getFeaturedProducts(4);
   if (related.length === 0) return null;
   return (
@@ -44,6 +46,12 @@ async function RelatedProducts({ categoryId }: { categoryId: string | null }) {
 }
 
 export default async function ProductPage({ params }: PageProps) {
+  // connection() tells Next.js this page is request-bound and must not be
+  // statically prerendered at build time. Unlike force-dynamic it does NOT
+  // cause hydration mismatches — the static shell renders normally and only
+  // the DB-dependent async components are deferred to request time.
+  await connection();
+
   const { slug } = await params;
   const product = await getProductBySlug(slug);
 
@@ -62,7 +70,6 @@ export default async function ProductPage({ params }: PageProps) {
 
   return (
     <div className="max-w-8xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
-      {/* Breadcrumb */}
       <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-muted-foreground flex-wrap">
         <Link href="/" className="hover:text-foreground transition-colors">Home</Link>
         <ChevronRight className="w-3 h-3" />
@@ -70,7 +77,10 @@ export default async function ProductPage({ params }: PageProps) {
         {product.category && (
           <>
             <ChevronRight className="w-3 h-3" />
-            <Link href={`/products?category=${product.category.slug}`} className="hover:text-foreground transition-colors">
+            <Link
+              href={`/products?category=${product.category.slug}`}
+              className="hover:text-foreground transition-colors"
+            >
               {product.category.name}
             </Link>
           </>
@@ -79,7 +89,6 @@ export default async function ProductPage({ params }: PageProps) {
         <span className="text-foreground font-medium truncate max-w-40">{product.name}</span>
       </nav>
 
-      {/* Main product section */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
         <ProductGallery images={product.images} productName={product.name} />
         <ProductDetails
@@ -91,9 +100,8 @@ export default async function ProductPage({ params }: PageProps) {
         />
       </div>
 
-      {/* Related products */}
       <Suspense fallback={<ProductGridSkeleton count={4} />}>
-        <RelatedProducts categoryId={product.categoryId} />
+        <RelatedProducts />
       </Suspense>
     </div>
   );

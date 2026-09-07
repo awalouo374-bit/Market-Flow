@@ -1,10 +1,7 @@
 import { Suspense } from "react";
 import Link from "next/link";
 import { ArrowRight, Zap, TrendingUp, Shield, Truck } from "lucide-react";
-
-// This page fetches from the database via Neon serverless — it must not be
-// statically pre-rendered at build time (the DB may be unreachable then).
-export const dynamic = "force-dynamic";
+import { connection } from "next/server";
 import { getFeaturedProducts, getCatalogCategories } from "@/lib/catalog";
 import { ProductCard } from "@/modules/catalog/ProductCard";
 import { CategoryBanner } from "@/modules/catalog/CategoryBanner";
@@ -17,6 +14,7 @@ import { NewsletterSection } from "@/modules/catalog/NewsletterSection";
 
 // ── Featured Products — async RSC streamed via Suspense ───────────────────────
 async function FeaturedProductsSection() {
+  await connection();
   const [featured, categories] = await Promise.all([
     getFeaturedProducts(8),
     getCatalogCategories(),
