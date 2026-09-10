@@ -13,7 +13,7 @@ import {
 export const dynamic = "force-dynamic";
 
 export const metadata: Metadata = {
-  title: "Parametres du compte – MarketFlow",
+  title: "Parametres du compte - MarketFlow",
   description:
     "Modifiez votre profil, changez votre mot de passe et gerez vos adresses de livraison.",
 };

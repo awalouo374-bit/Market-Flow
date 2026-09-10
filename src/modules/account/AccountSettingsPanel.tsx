@@ -434,7 +434,7 @@ function AddressCard({
           {address.streetAddress}
           <br />
           {address.postalCode} {address.city}
-          {address.state ? `, ${address.state}` : ""} — {address.country}
+          {address.state ? `, ${address.state}` : ""} â€” {address.country}
         </p>
       </div>
 
