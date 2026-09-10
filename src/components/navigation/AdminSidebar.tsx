@@ -27,6 +27,8 @@ import { BrandLogo } from "@/components/shared/BrandLogo";
 interface AdminSidebarProps {
   isCollapsed: boolean;
   onToggleCollapse: () => void;
+  onItemClick?: () => void;
+  className?: string;
 }
 
 const adminNavSections = [
@@ -62,18 +64,30 @@ const adminNavSections = [
   },
 ];
 
-export function AdminSidebar({ isCollapsed, onToggleCollapse }: AdminSidebarProps) {
+export function AdminSidebar({
+  isCollapsed,
+  onToggleCollapse,
+  onItemClick,
+  className,
+}: AdminSidebarProps) {
   const pathname = usePathname();
+  const isRelative = className?.includes("relative");
 
   return (
     <aside
-      className={`fixed top-0 left-0 z-40 h-screen bg-card border-r border-border transition-all duration-300 flex flex-col ${
+      className={`${
+        isRelative ? "relative h-full" : "fixed top-0 left-0 z-40 h-screen"
+      } bg-card border-r border-border transition-all duration-300 flex flex-col ${
         isCollapsed ? "w-20" : "w-64"
-      }`}
+      } ${className ?? ""}`}
     >
       {/* Sidebar Header */}
       <div className="h-16 px-4 border-b border-border flex items-center justify-between">
-        <Link href="/admin" className="flex items-center gap-3 overflow-hidden">
+        <Link
+          href="/admin"
+          onClick={onItemClick}
+          className="flex items-center gap-3 overflow-hidden"
+        >
           <BrandLogo size="sm" />
           {!isCollapsed && (
             <div className="flex flex-col">
@@ -115,6 +129,7 @@ export function AdminSidebar({ isCollapsed, onToggleCollapse }: AdminSidebarProp
                   <Link
                     key={item.href}
                     href={item.href}
+                    onClick={onItemClick}
                     title={isCollapsed ? item.label : undefined}
                     className={`flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-all duration-200 group ${
                       isActive
@@ -154,6 +169,7 @@ export function AdminSidebar({ isCollapsed, onToggleCollapse }: AdminSidebarProp
       <div className="p-3 border-t border-border space-y-2 bg-muted/20">
         <Link
           href="/"
+          onClick={onItemClick}
           className={`flex items-center gap-3 px-3 py-2 rounded-xl text-xs font-semibold text-muted-foreground hover:text-foreground hover:bg-muted transition-colors ${
             isCollapsed ? "justify-center" : ""
           }`}

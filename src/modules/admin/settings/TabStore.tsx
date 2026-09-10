@@ -37,18 +37,18 @@ export function TabStore({ onChange }: TabStoreProps) {
   }
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-3 p-4 rounded-2xl bg-muted/40 border border-border">
+    <div className="space-y-6 min-w-0 w-full">
+      <div className="flex items-center gap-3 p-3.5 sm:p-4 rounded-2xl bg-muted/40 border border-border min-w-0">
         <div className="p-2.5 rounded-xl bg-accent/10 text-accent shrink-0">
           <Store className="w-5 h-5" />
         </div>
-        <div>
-          <p className="text-sm font-semibold text-foreground">Paramètres de la boutique</p>
-          <p className="text-xs text-muted-foreground">Informations publiques et préférences régionales</p>
+        <div className="min-w-0">
+          <p className="text-sm font-semibold text-foreground truncate">Paramètres de la boutique</p>
+          <p className="text-xs text-muted-foreground truncate">Informations publiques et préférences régionales</p>
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
         <FieldGroup label="Nom de la boutique" htmlFor="store-name" required>
           <input
             id="store-name"

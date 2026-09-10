@@ -54,8 +54,8 @@ export async function getAdminCustomers(params: {
       role:       users.role,
       status:     users.status,
       createdAt:  users.createdAt,
-      orderCount: sql<number>`(select count(*) from orders o where o.user_id = ${users.id})::int`,
-      totalSpent: sql<string>`coalesce((select sum(o.total) from orders o where o.user_id = ${users.id})::text, '0.00')`,
+      orderCount: sql<number>`(select count(*) from orders o where o.user_id = "users"."id")::int`,
+      totalSpent: sql<string>`coalesce((select sum(o.total) from orders o where o.user_id = "users"."id")::text, '0.00')`,
     })
     .from(users)
     .where(where)

@@ -48,7 +48,7 @@ export interface OrderAddress {
 
 export const carts = pgTable("carts", {
   id: uuid("id").defaultRandom().primaryKey(),
-  userId: uuid("user_id").references(() => users.id, { onDelete: "cascade" }),
+  userId: text("user_id").references(() => users.id, { onDelete: "cascade" }),
   sessionToken: varchar("session_token", { length: 255 }),
   createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { mode: "date" }).defaultNow().notNull(),
@@ -70,7 +70,7 @@ export const cartItems = pgTable("cart_items", {
 export const orders = pgTable("orders", {
   id: uuid("id").defaultRandom().primaryKey(),
   orderNumber: varchar("order_number", { length: 50 }).notNull().unique(),
-  userId: uuid("user_id").references(() => users.id, { onDelete: "set null" }),
+  userId: text("user_id").references(() => users.id, { onDelete: "set null" }),
   status: orderStatusEnum("status").default("pending").notNull(),
   paymentStatus: paymentStatusEnum("payment_status").default("pending").notNull(),
   fulfillmentStatus: fulfillmentStatusEnum("fulfillment_status").default("unfulfilled").notNull(),

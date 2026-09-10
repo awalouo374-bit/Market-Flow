@@ -27,6 +27,6 @@ export const inventoryLogs = pgTable("inventory_logs", {
   changeQuantity: integer("change_quantity").notNull(),
   type: inventoryLogTypeEnum("type").notNull(),
   notes: text("notes"),
-  performedBy: uuid("performed_by").references(() => users.id, { onDelete: "set null" }),
+  performedBy: text("performed_by").references(() => users.id, { onDelete: "set null" }),
   createdAt: timestamp("created_at", { mode: "date" }).defaultNow().notNull(),
 });

@@ -15,15 +15,15 @@ export default async function AdminSettingsPage() {
   };
 
   return (
-    <div className="space-y-6 animate-in fade-in duration-300">
+    <div className="space-y-6 animate-in fade-in duration-300 min-w-0 w-full">
       {/* Page header */}
-      <div className="flex items-center gap-3">
-        <div className="p-2.5 rounded-xl bg-accent/10 text-accent">
+      <div className="flex items-center gap-3 min-w-0">
+        <div className="p-2.5 rounded-xl bg-accent/10 text-accent shrink-0">
           <Settings className="w-5 h-5" />
         </div>
-        <div>
-          <h1 className="text-xl font-bold text-foreground">Paramètres</h1>
-          <p className="text-xs text-muted-foreground">
+        <div className="min-w-0">
+          <h1 className="text-lg sm:text-xl font-bold text-foreground truncate">Paramètres</h1>
+          <p className="text-xs text-muted-foreground line-clamp-1 sm:line-clamp-none">
             Profil admin, configuration de la boutique, intégrations et sécurité
           </p>
         </div>

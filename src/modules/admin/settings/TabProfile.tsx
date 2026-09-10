@@ -42,23 +42,23 @@ export function TabProfile({ initial, onChange }: TabProfileProps) {
   const errorInput = "border-destructive focus:ring-destructive/40";
 
   return (
-    <div className="space-y-6">
-      <div className="flex items-center gap-5 p-5 rounded-2xl bg-muted/40 border border-border">
+    <div className="space-y-6 min-w-0 w-full">
+      <div className="flex items-center gap-4 sm:gap-5 p-4 sm:p-5 rounded-2xl bg-muted/40 border border-border min-w-0">
         <div className="relative shrink-0">
-          <div className="w-16 h-16 rounded-2xl bg-flow-gradient text-white flex items-center justify-center text-xl font-bold shadow-sm">
+          <div className="w-14 h-14 sm:w-16 sm:h-16 rounded-2xl bg-flow-gradient text-white flex items-center justify-center text-lg sm:text-xl font-bold shadow-sm">
             {initials}
           </div>
           <button
             type="button"
             aria-label="Changer la photo de profil"
-            className="absolute -bottom-1.5 -right-1.5 w-6 h-6 rounded-full bg-accent text-white flex items-center justify-center border-2 border-background hover:bg-accent/80 transition-colors"
+            className="absolute -bottom-1 -right-1 w-6 h-6 rounded-full bg-accent text-white flex items-center justify-center border-2 border-background hover:bg-accent/80 transition-colors"
           >
             <Camera className="w-3 h-3" />
           </button>
         </div>
-        <div>
-          <p className="font-semibold text-foreground">{initial.name || "Admin"}</p>
-          <p className="text-xs text-muted-foreground">{initial.email}</p>
+        <div className="min-w-0 flex-1">
+          <p className="font-semibold text-foreground truncate">{initial.name || "Admin"}</p>
+          <p className="text-xs text-muted-foreground truncate">{initial.email}</p>
           <p className="text-[11px] text-accent mt-0.5 font-semibold uppercase tracking-wide">
             Administrateur
           </p>

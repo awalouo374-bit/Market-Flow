@@ -50,9 +50,44 @@ export function SettingsShell({ user }: SettingsShellProps) {
   }
 
   return (
-    <>
-      <div className="flex gap-6">
-        {/* Left vertical tab nav */}
+    <div className="w-full min-w-0 space-y-6">
+      {/* Mobile horizontal tabs (< sm) */}
+      <div className="sm:hidden w-full overflow-hidden">
+        <nav
+          aria-label="Sections des paramètres (mobile)"
+          className="flex items-center gap-1.5 overflow-x-auto pb-2 border-b border-border no-scrollbar -mx-1 px-1"
+        >
+          {TABS.map(({ key, label, icon: Icon }) => {
+            const isActive = activeTab === key;
+            const hasDirty = dirtyTabs.has(key);
+            return (
+              <button
+                key={key}
+                type="button"
+                aria-current={isActive ? "page" : undefined}
+                onClick={() => setActiveTab(key)}
+                className={`flex items-center gap-2 px-3.5 py-2 rounded-xl whitespace-nowrap text-xs font-semibold shrink-0 transition-all ${
+                  isActive
+                    ? "bg-accent/10 text-accent border border-accent/20"
+                    : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
+                }`}
+              >
+                <Icon className={`w-3.5 h-3.5 shrink-0 ${isActive ? "text-accent" : ""}`} />
+                <span>{label}</span>
+                {hasDirty && (
+                  <span
+                    aria-label="Modifications en attente"
+                    className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0"
+                  />
+                )}
+              </button>
+            );
+          })}
+        </nav>
+      </div>
+
+      <div className="flex flex-col sm:flex-row gap-6 min-w-0">
+        {/* Left vertical tab nav (sm+) */}
         <nav
           aria-label="Sections des paramètres"
           className="hidden sm:flex flex-col gap-1 w-44 shrink-0"
@@ -88,26 +123,6 @@ export function SettingsShell({ user }: SettingsShellProps) {
           })}
         </nav>
 
-        {/* Mobile horizontal tabs */}
-        <div className="sm:hidden w-full">
-          <div className="flex overflow-x-auto gap-1 border-b border-border pb-0 mb-4 -mx-1 px-1">
-            {TABS.map(({ key, label, icon: Icon }) => {
-              const isActive = activeTab === key;
-              const hasDirty = dirtyTabs.has(key);
-              return (
-                <button key={key} type="button" onClick={() => setActiveTab(key)}
-                  className={`flex items-center gap-1.5 px-3 py-2 whitespace-nowrap text-sm font-semibold border-b-2 transition-colors ${
-                    isActive ? "border-accent text-accent" : "border-transparent text-muted-foreground hover:text-foreground"
-                  }`}>
-                  <Icon className="w-3.5 h-3.5" />
-                  {label}
-                  {hasDirty && <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />}
-                </button>
-              );
-            })}
-          </div>
-        </div>
-
         {/* Tab content */}
         <div className="flex-1 min-w-0 pb-20">
           {activeTab === "profile" && <TabProfile initial={user} onChange={markDirty} />}
@@ -124,6 +139,6 @@ export function SettingsShell({ user }: SettingsShellProps) {
         onSave={handleSave}
         onDiscard={handleDiscard}
       />
-    </>
+    </div>
   );
 }

@@ -101,20 +101,22 @@ export function TabIntegrations({ onChange }: TabIntegrationsProps) {
   const base = "w-full h-10 rounded-xl border border-border bg-background px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-ring transition-colors";
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 sm:space-y-8 min-w-0 w-full">
       {/* Stripe */}
-      <div className="space-y-4 p-5 rounded-2xl border border-border bg-card">
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-[#635BFF]/10 flex items-center justify-center">
+      <div className="space-y-4 p-4 sm:p-5 rounded-2xl border border-border bg-card min-w-0">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 min-w-0">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-8 h-8 rounded-lg bg-[#635BFF]/10 flex items-center justify-center shrink-0">
               <Zap className="w-4 h-4 text-[#635BFF]" />
             </div>
-            <div>
+            <div className="min-w-0">
               <p className="text-sm font-bold text-foreground">Stripe</p>
-              <p className="text-xs text-muted-foreground">Paiements en ligne et gestion des remboursements</p>
+              <p className="text-xs text-muted-foreground truncate">Paiements en ligne et gestion des remboursements</p>
             </div>
           </div>
-          <IntegrationBadge status="connected" mode="live" />
+          <div className="self-start sm:self-auto shrink-0">
+            <IntegrationBadge status="connected" mode="live" />
+          </div>
         </div>
         <div className="grid grid-cols-1 gap-4">
           <ApiKeyField id="stripe-pk" label="Clé publique (Publishable Key)" value={stripePublic}
@@ -125,18 +127,20 @@ export function TabIntegrations({ onChange }: TabIntegrationsProps) {
       </div>
 
       {/* SMTP */}
-      <div className="space-y-4 p-5 rounded-2xl border border-border bg-card">
-        <div className="flex items-center justify-between gap-3">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center">
+      <div className="space-y-4 p-4 sm:p-5 rounded-2xl border border-border bg-card min-w-0">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 min-w-0">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-8 h-8 rounded-lg bg-accent/10 flex items-center justify-center shrink-0">
               <CheckCircle2 className="w-4 h-4 text-accent" />
             </div>
-            <div>
+            <div className="min-w-0">
               <p className="text-sm font-bold text-foreground">SMTP / E-mail transactionnel</p>
-              <p className="text-xs text-muted-foreground">Confirmation de commande, réinitialisation mot de passe</p>
+              <p className="text-xs text-muted-foreground truncate">Confirmation de commande, réinitialisation mot de passe</p>
             </div>
           </div>
-          <IntegrationBadge status="connected" />
+          <div className="self-start sm:self-auto shrink-0">
+            <IntegrationBadge status="connected" />
+          </div>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <FieldGroup label="Serveur SMTP" htmlFor="smtp-host">
